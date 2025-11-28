@@ -3,6 +3,9 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Dans le dossier data, on stock les fichiers des bases de données, de façon éphémère
+data/*
+
 # C extensions
 *.so
 
