@@ -29,4 +29,9 @@ II. **[Les données géographiques](https://www.census.gov/geographies/mapping-f
 
 ## Navigation au sein du projet <a name="subheading-5">
 
+Dans un terminal, commencez par la commande : 
+```bash
+pip install -r requirements.txt 
+```
+
 ## Résultats principaux et conclusions <a name="subheading-6">
