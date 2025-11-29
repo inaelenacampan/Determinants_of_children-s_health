@@ -29,4 +29,6 @@ II. **[Les données géographiques](https://www.census.gov/geographies/mapping-f
 
 ## Navigation au sein du projet <a name="subheading-5">
 
+La fichier qui décrit l'ensemble des résultats en détail est "Determinants_of_children-s_health.ipynb".
+
 ## Résultats principaux et conclusions <a name="subheading-6">
