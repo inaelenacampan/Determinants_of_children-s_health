@@ -34,3 +34,16 @@ def lecture_fichier_shapefile(fs, chemin_lecture, chemin_ecriture):
                             f"{chemin_ecriture}cb_2024_us_state_20m.{ext}")
     gdf = gpd.read_file(f"{chemin_ecriture}cb_2024_us_state_20m.shp")
     return gdf
+
+
+def write_questions(variables, guide):
+    count = 1
+    with open("data/questions_finales.txt", "w", encoding="utf-8") as f:
+        for var in variables:
+            q = guide[guide["Variable"] == var]
+            for idx, row in q.iterrows():
+                if str(row["Question"]) != "nan":
+                    f.write(str(count) + ". " + str(row["Question"]) + "\t")
+                if str(row["Response Code"]) != "nan":
+                    f.write(str(row["Response Code"]) + "\n")
+                count = count + 1

@@ -2,3 +2,5 @@ matplotlib
 pandas
 s3fs
 geopandas
+numpy
+scikit-learn
