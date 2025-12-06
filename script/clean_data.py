@@ -2,6 +2,7 @@
 
 import pandas as pd
 import geopandas as gpd
+from sklearn.impute import KNNImputer
 
 # Lecture des données
 
@@ -47,3 +48,43 @@ def write_questions(variables, guide):
                 if str(row["Response Code"]) != "nan":
                     f.write(str(row["Response Code"]) + "\n")
                 count = count + 1
+
+
+def impute_values(year, df):
+    # Ce code prend environ 2 minutes à tourner en vue du choix de voisins = 3
+    # (la version avec un seul voisin est plus rapide)
+
+    # Cette variable n'est pas convertible telle que dans un type float => recodage
+    df["FORMTYPE"] = df["FORMTYPE"].str.replace("T", "").astype(float)
+    # sauvegarde de l'état des variables avant l'imputation
+    missing_mask = df.isna()
+
+    # pour imputer le dataset, un type float est obligatoire
+    df_float = df.astype(float)
+
+    # Imputation avec la méthode de k plus proches voisins
+    imputer = KNNImputer(n_neighbors=3, weights="uniform")
+    imputed_array = imputer.fit_transform(df_float)
+
+    # Remettre dans un DataFrame
+    df_final = pd.DataFrame(imputed_array, columns=df.columns)
+
+    # recast puisque les variables sont catégorielles, on arrondit
+    df_final = df_final.round().astype(int)
+    df_final["FORMTYPE"] = "T" + df_final["FORMTYPE"].astype(int).astype(str)
+
+    # On sait quelles valeurs ont été imputées dans le dataframe final
+    for col in df.columns:
+        df_final[col + "_imputed"] = missing_mask[col]
+
+    return df_final
+
+
+def impute_values_over_dataset(years, dfs):
+    # execution de l'imputation sur l'ensemble des bases de données
+    dfs_final = {}
+    for year in years:
+        df = dfs[year]
+        df_final = impute_values(year, df)
+        dfs_final[year] = df_final
+    return dfs_final
