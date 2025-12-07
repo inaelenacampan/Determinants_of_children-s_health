@@ -54,26 +54,36 @@ def impute_values(year, df):
     # Ce code prend environ 2 minutes à tourner en vue du choix de voisins = 3
     # (la version avec un seul voisin est plus rapide)
 
-    # Cette variable n'est pas convertible telle que dans un type float => recodage
+    # Recoder FORMTYPE pour qu'il soit numérique
     df["FORMTYPE"] = df["FORMTYPE"].str.replace("T", "").astype(float)
-    # sauvegarde de l'état des variables avant l'imputation
+    # Masque des valeurs manquantes pour toutes les colonnes
     missing_mask = df.isna()
 
-    # pour imputer le dataset, un type float est obligatoire
-    df_float = df.astype(float)
+    # Imputation générale pour toutes les variables sauf HEIGHT et WEIGHT ---
+    other_cols = df.columns.difference(["HEIGHT", "WEIGHT"])
+    df_other = df[other_cols].astype(float)  # conversion en float pour performer l'imputation
+    imputer_general = KNNImputer(n_neighbors=3, weights="uniform")
+    df_other_imputed_array = imputer_general.fit_transform(df_other)
+    df_other_imputed = pd.DataFrame(df_other_imputed_array, columns=other_cols, index=df.index)
 
-    # Imputation avec la méthode de k plus proches voisins
-    imputer = KNNImputer(n_neighbors=3, weights="uniform")
-    imputed_array = imputer.fit_transform(df_float)
+    # Imputation de HEIGHT et WEIGHT uniquement pour FORMTYPE != T1
+    mask_hw = df["FORMTYPE"] != 1
+    df_hw = df.loc[mask_hw, ["HEIGHT", "WEIGHT"]].astype(float)
+    imputer_hw = KNNImputer(n_neighbors=3, weights="uniform")
+    df_hw_imputed_array = imputer_hw.fit_transform(df_hw)
+    df_hw_imputed = pd.DataFrame(df_hw_imputed_array,
+                                 columns=["HEIGHT", "WEIGHT"], index=df_hw.index)
 
-    # Remettre dans un DataFrame
-    df_final = pd.DataFrame(imputed_array, columns=df.columns)
+    # Remettre les valeurs imputées dans le DataFrame final
+    df_final = df.copy()
+    df_final[other_cols] = df_other_imputed
+    df_final.loc[mask_hw, ["HEIGHT", "WEIGHT"]] = df_hw_imputed
 
-    # recast puisque les variables sont catégorielles, on arrondit
-    df_final = df_final.round().astype(int)
+    # Arrondir les colonnes (puisque on est sur des variables principalement catégorielles)
+    df_final = df_final.round().astype(int, errors='ignore')
     df_final["FORMTYPE"] = "T" + df_final["FORMTYPE"].astype(int).astype(str)
 
-    # On sait quelles valeurs ont été imputées dans le dataframe final
+    # Ajouter les colonnes _imputed pour savoir quelles valeurs ont été imputées
     for col in df.columns:
         df_final[col + "_imputed"] = missing_mask[col]
 
