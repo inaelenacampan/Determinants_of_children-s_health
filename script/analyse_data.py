@@ -2,6 +2,7 @@ import prince
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from matplotlib.patches import Ellipse
 
 
 def mca_analysis(year, dfs, drop_columns):
@@ -34,6 +35,53 @@ def mca_plot_individuals(df_mca, mca):
     plt.title('Analyse en Composantes Multiples, Individus', fontsize=14)
 
     # Pour une grille
+    plt.grid()
+
+    plt.legend()
+    plt.show()
+
+
+def mca_plot_individuals_group(df_mca, mca, variable, guide):
+    row_coords = mca.row_coordinates(df_mca)
+    groups = df_mca[variable].unique()
+    # Les variables sont catégorielles et la légende se présente sous forme d'un str
+    # format : ciffre1 = ... || chiffre2 = ...
+    responde_str = guide.loc[guide["Variable"] == variable, "Response Code"].iloc[0]
+    code_dict = dict(item.split(' = ') for item in responde_str.split('||'))
+
+    plt.figure(figsize=(10, 10))
+    palette = sns.color_palette("tab10", len(groups))
+
+    for i, group in enumerate(groups):
+        mask = (df_mca[variable] == group)
+        x = row_coords[0][mask]
+        y = row_coords[1][mask]
+        # Scatter plot par groupe
+        label = code_dict.get(str(group), str(group))
+        plt.scatter(x, y, s=5, alpha=0.6, color=palette[i], label=label)
+        # code adapté depuis internet pour manipuler les ellipses
+        # Ellipse pour montrer un regroupement des individus
+        # plus d'un individu
+        if len(x) > 1:
+            cov = np.cov(x, y)
+            # calcule les valeurs propres (vals) et vecteurs propres (vecs) d’une matrice symétrique
+            vals, vecs = np.linalg.eigh(cov)
+            width, height = 2 * np.sqrt(vals) * 2  # facteur 2 pour agrandir ellipse
+            angle = np.degrees(np.arctan2(*vecs[:, 0][::-1]))
+            ell = Ellipse(xy=(np.mean(x), np.mean(y)),
+                          width=width, height=height,
+                          angle=angle,
+                          color=palette[i], alpha=0.2)
+            # GCA = Get Current Axes
+            plt.gca().add_patch(ell)
+
+    # Récupération du texte de la question pour le titre
+    question_text = guide.loc[guide["Variable"] == variable, "Question"].iloc[0]
+
+    plt.xlabel('Dimension 0', fontsize=12)
+    plt.ylabel('Dimension 1', fontsize=12)
+
+    plt.title(f'ACM des individus par groupe: \n{question_text}', fontsize=10)
     plt.grid()
 
     plt.legend()
