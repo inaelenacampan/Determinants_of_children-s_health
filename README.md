@@ -25,6 +25,8 @@ I. Le **[NSCH](https://www.census.gov/programs-surveys/nsch/data/datasets.html)*
 
 II. **[Les données géographiques](https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html)** permettent de tracer sur un fond de carte des différents états des US des résultats issus de la base de données antérieure.
 
+III. **[Les données économiques](https://apps.bea.gov/regional/downloadzip.htm)** permettent d'obtenir un indice synthétique plus fiable au niveau des état Américains. Le BEA (Bureau of Economic Analysis) c'est l’agence officielle américaine qui mesure l'activité économique : PIB, revenu, commerce, productivité, comptes régionaux, etc. Elle produit des données standardisées, fiables et comparables dans le temps, utilisées par le gouvernement, les chercheurs et les institutions internationales.
+
 ## Visualisation des données et modélisation <a name="subheading-4">
 
 Pour s'y prendre une sélection de variable est faite à travers une dimension santé physique, une dimension santé mentale, des questions d'assurance et environnement familial.
