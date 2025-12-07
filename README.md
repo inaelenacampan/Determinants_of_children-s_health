@@ -27,8 +27,13 @@ II. **[Les données géographiques](https://www.census.gov/geographies/mapping-f
 
 ## Visualisation des données et modélisation <a name="subheading-4">
 
-## Navigation au sein du projet <a name="subheading-5">
+Pour s'y prendre une sélection de variable est faite à travers une dimension santé physique, une dimension santé mentale, des questions d'assurance et environnement familial.
 
+Pour gérer les valeurs manquantes, non-dues à la forme du questionnaire, nous utilisons une imputation en utilisant la fonction ```KKNImputer``` de la librairie scikit-learn. Les valeurs manquantes de l'échantillon sont imputées en utilisant la valeur moyenne des ```n_neighbors``` plus proches voisins trouvés dans l’ensemble.
+
+Pour comprendre la structure des données, nous effectuons une analyse des correspondances multiples et une carte de chaleur des corrélations (heatmap).
+
+## Navigation au sein du projet <a name="subheading-5">
 
 La fichier qui décrit l'ensemble des résultats en détail est "Determinants_of_children-s_health.ipynb".
 
@@ -36,5 +41,7 @@ Dans un terminal, commencez par la commande :
 ```bash
 pip install -r requirements.txt 
 ```
+
+Les fonctions annexes sont regroupés dans le dossier ```script```.
 
 ## Résultats principaux et conclusions <a name="subheading-6">
