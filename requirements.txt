@@ -4,4 +4,5 @@ s3fs
 geopandas
 numpy
 scikit-learn
-mca
+prince
+seaborn
