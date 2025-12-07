@@ -7,3 +7,4 @@ scikit-learn
 prince
 seaborn
 ipywidgets
+pdoc

@@ -46,4 +46,14 @@ pip install -r requirements.txt
 
 Les fonctions annexes sont regroupés dans le dossier ```script```.
 
+Pour s'y prendre une documentation est également fournie en format html dans le dossier ```docs```. 
+```bash
+pdoc --output-dir docs script
+```
+
+Pour une approche plus interactive, dans le terminal commencez par la commande :
+```bash
+pdoc script 
+```
+
 ## Résultats principaux et conclusions <a name="subheading-6">

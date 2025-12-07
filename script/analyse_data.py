@@ -6,6 +6,18 @@ from matplotlib.patches import Ellipse
 
 
 def mca_analysis(year, dfs, drop_columns):
+    """
+    Réaliser une ACM.
+
+    Args:
+        year (str): L'année du formulaire.
+        dfs (dict): Le dictionnaire des bases des formulaires NSCH.
+        drop_columns (list) : La liste des colonnes à filtrer.
+
+    Returns:
+        df_mca : La base de données adéquate pour réaliser l'ACM.
+        mca : Objet mca.
+    """
     df = dfs[year]
     df_mca = df.drop(columns=[col for col in drop_columns])
     df_mca = df_mca.drop(columns=[col for col in df_mca.columns if 'imputed' in col])
@@ -15,6 +27,16 @@ def mca_analysis(year, dfs, drop_columns):
 
 
 def mca_plot_individuals(df_mca, mca):
+    """
+    Visualisation des individus de la base de données dans un plan 2D.
+
+    Args:
+        df_mca : La base de données adéquate pour réaliser l'ACM.
+        mca : L'objet mca.
+
+    Returns:
+        génération d'un plot (pas de return explicite)
+    """
     row_coords = mca.row_coordinates(df_mca)
 
     plt.figure(figsize=(10, 10))
@@ -42,6 +64,18 @@ def mca_plot_individuals(df_mca, mca):
 
 
 def mca_plot_individuals_group(df_mca, mca, variable, guide):
+    """
+    Visualisation des individus selon un critère de regroument.
+
+    Args:
+        df_mca : La base de données adéquate pour réaliser l'ACM.
+        mca : L'objet mca.
+        variable (str) : Le critère de regroupement.
+        guide (pd object) : Le guide des variables NSCH.
+
+    Returns:
+        génération d'un plot (pas de return explicite)
+    """
     row_coords = mca.row_coordinates(df_mca)
     groups = df_mca[variable].unique()
     # Les variables sont catégorielles et la légende se présente sous forme d'un str
@@ -89,7 +123,17 @@ def mca_plot_individuals_group(df_mca, mca, variable, guide):
 
 
 def mca_plot_categories(df_mca, mca, seuil):
+    """
+    Visualisation des modalités (variables catégorielles) de la base de données dans un plan 2D.
 
+    Args:
+        df_mca : La base de données adéquate pour réaliser l'ACM.
+        mca : L'objet mca.
+        seuil (int) : Pour mieux visualiser le graphique, combien de composantes "principales".
+
+    Returns:
+        génération d'une figure avec 2 plot (pas de return explicite)
+    """
     # Pour les modalités, le graphique est très dense
     # La longueur de la flèche indique l’importance de cette modalité dans l’espace MCA
     # plus la flèche est longue, plus cette modalité contribue à la variance
@@ -137,6 +181,15 @@ def mca_plot_categories(df_mca, mca, seuil):
 
 
 def heatmap_generator(df):
+    """
+    Visualisation de la matrice des corrélations de façon hierarchique.
+
+    Args:
+        df : La base de données.
+
+    Returns:
+        génération d'un plot (pas de return explicite)
+    """
     matrix = df.corr()
 
     sns.set_theme(style="white")  # style propre

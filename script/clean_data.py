@@ -8,10 +8,32 @@ from sklearn.impute import KNNImputer
 
 
 def lecture_fichier(fs, chemin_lecture, chemin_ecriture):
+    """
+    Lecture depuis l'espace de stockage S3.
+
+    Args:
+        fs : abstraction du filesystem
+        chemin_lecture (str)
+        chemin_ecriture (str)
+
+    Returns:
+        rien
+    """
     fs.get(chemin_lecture, chemin_ecriture)
 
 
 def lecture_fichier_sas(fs, chemin_lecture, chemin_ecriture):
+    """
+    Lecture des fichiers sas.
+
+    Args:
+        fs : abstraction du filesystem
+        chemin_lecture (str)
+        chemin_ecriture (str)
+
+    Returns:
+        génération d'un objet dataframe
+    """
     for year in ["2024", "2023", "2022", "2021"]:
         lecture_fichier(fs, f"{chemin_lecture}nsch_{year}e_topical.sas7bdat",
                         f"{chemin_ecriture}nsch_{year}e_topical.sas7bdat")
@@ -24,12 +46,34 @@ def lecture_fichier_sas(fs, chemin_lecture, chemin_ecriture):
 
 
 def lecture_fichier_csv(fs, chemin_lecture, chemin_ecriture):
+    """
+    Lecture des fichiers csv.
+
+    Args:
+        fs : abstraction du filesystem
+        chemin_lecture (str)
+        chemin_ecriture (str)
+
+    Returns:
+        génération d'un objet dataframe
+    """
     lecture_fichier(fs, chemin_lecture, chemin_ecriture)
     guide = pd.read_csv(chemin_ecriture, index_col=False)
     return guide
 
 
 def lecture_fichier_shapefile(fs, chemin_lecture, chemin_ecriture):
+    """
+    Lecture des fichiers géographiques (.shp, principalement).
+
+    Args:
+        fs : abstraction du filesystem
+        chemin_lecture (str)
+        chemin_ecriture (str)
+
+    Returns:
+        génération d'un objet geopandas
+    """
     for ext in ["shp", "shx", "dbf", "prj"]:
         lecture_fichier(fs, f"{chemin_lecture}cb_2024_us_state_20m.{ext}",
                             f"{chemin_ecriture}cb_2024_us_state_20m.{ext}")
@@ -38,6 +82,16 @@ def lecture_fichier_shapefile(fs, chemin_lecture, chemin_ecriture):
 
 
 def write_questions(variables, guide):
+    """
+    Sauvergarde des questions des variables d'interet.
+
+    Args:
+        variables (set) : variables séléctionnées
+        guide (dataframe) : guide des variables NSCH
+
+    Returns:
+        rien
+    """
     count = 1
     with open("data/questions_finales.txt", "w", encoding="utf-8") as f:
         for var in variables:
@@ -51,6 +105,16 @@ def write_questions(variables, guide):
 
 
 def impute_values(year, df):
+    """
+    Méthode d'imputation des variables manquantes.
+
+    Args:
+        year (str) : année du formulaire NSCH.
+        df : dataframe sondage.
+
+    Returns:
+        génération d'un objet geopandas
+    """
     # Ce code prend environ 2 minutes à tourner en vue du choix de voisins = 3
     # (la version avec un seul voisin est plus rapide)
 
@@ -91,6 +155,16 @@ def impute_values(year, df):
 
 
 def impute_values_over_dataset(years, dfs):
+    """
+    Réalisation de l'amputation sur l'ensemble des bases de données.
+
+    Args:
+        years (list) : années des enquetes NSCH
+        dfs (dict) : dictionnaire des dataset NSCH
+
+    Returns:
+        génération d'un dictionnaire de dataframes
+    """
     # execution de l'imputation sur l'ensemble des bases de données
     dfs_final = {}
     for year in years:
@@ -101,6 +175,17 @@ def impute_values_over_dataset(years, dfs):
 
 
 def write_on_S3(fs, years, dfs_final):
+    """
+    Ecriture parquet en S3.
+
+    Args:
+        fs : abstraction du filesystem
+        years (list) : années des enquetes NSCH
+        dfs_final (dict) : dictionnaire des dataset NSCH
+
+    Returns:
+        rien
+    """
     MY_BUCKET = "inacampan"
     FILE_PATH_OUT_S3 = f"{MY_BUCKET}/diffusion/Determinants_of_children-s_health/NSCH/clean_data"
 
@@ -112,7 +197,16 @@ def write_on_S3(fs, years, dfs_final):
 
 
 def read_on_S3(fs, years):
+    """
+    Lecture parquet depuis S3.
 
+    Args:
+        fs : abstraction du filesystem
+        years (list) : années des enquetes NSCH
+
+    Returns:
+        dictionnaire de dataset NSCH
+    """
     dfs_final = {}
 
     MY_BUCKET = "inacampan"
@@ -130,6 +224,16 @@ def read_on_S3(fs, years):
 
 
 def test_imputed(years, dfs_final):
+    """
+    Tester l'imputation.
+
+    Args:
+        years (list) : années des enquetes NSCH
+        dfs_final (dict) : dictionnaire des dataset NSCH
+
+    Returns:
+        rien
+    """
     # tester que l'imputation a été bien effectuée
     # on trie en ordre décroissant le pourcentage de valeurs manquantes
     # on regarde la première valeur
@@ -149,6 +253,15 @@ def test_imputed(years, dfs_final):
 
 
 def clean_gpd_dataframe(gdp):
+    """
+    Nettoyage de la base de données économiques.
+
+    Args:
+        gdp (dataframe) : base de données économiques.
+
+    Returns:
+        base corrigée
+    """
     gdp = gdp.replace({"(NA)": pd.NA})
 
     # on garde un peu plus d'années en cas de valeurs manquantes pour imputer
@@ -163,6 +276,16 @@ def clean_gpd_dataframe(gdp):
 
 
 def merge_gdp_on_gdf(gdp, gdf):
+    """
+    Réaliser la jointure entre les données économiques et les données géographiques.
+
+    Args:
+        gdp : base de données économiques.
+        gdf : base de données géographiques.
+
+    Returns:
+        dataframe obtenu avec la jointure
+    """
     # On veut faire la jointure entre la base géographique et la base économique
 
     # Etape 1 : passage en format wide de la base économique
@@ -191,6 +314,16 @@ def merge_gdp_on_gdf(gdp, gdf):
 
 
 def clean_enrichment_datasets(gdp, gdf):
+    """
+    Regrouper les deux fonctions précédentes.
+
+    Args:
+        gdp : base de données économiques.
+        gdf : base de données géographiques.
+
+    Returns:
+        dataframe obtenu avec la jointure, après un premier nettoyage
+    """
     gdp = clean_gpd_dataframe(gdp)
     df = merge_gdp_on_gdf(gdp, gdf)
     return df
