@@ -98,3 +98,99 @@ def impute_values_over_dataset(years, dfs):
         df_final = impute_values(year, df)
         dfs_final[year] = df_final
     return dfs_final
+
+
+def write_on_S3(fs, years, dfs_final):
+    MY_BUCKET = "inacampan"
+    FILE_PATH_OUT_S3 = f"{MY_BUCKET}/diffusion/Determinants_of_children-s_health/NSCH/clean_data"
+
+    for year in years:
+        path = f"{FILE_PATH_OUT_S3}/{year}.parquet"
+        df = dfs_final[year]
+        with fs.open(path, 'wb') as file_out:
+            df.to_parquet(file_out)
+
+
+def read_on_S3(fs, years):
+
+    dfs_final = {}
+
+    MY_BUCKET = "inacampan"
+    FILE_PATH_OUT_S3 = f"{MY_BUCKET}/diffusion/Determinants_of_children-s_health/NSCH/clean_data"
+
+    # récuperer les dataframes stockés antérieurement dans le S3
+
+    for year in years:
+        path = f"{FILE_PATH_OUT_S3}/{year}.parquet"
+        with fs.open(path, 'rb') as file_in:
+            df = pd.read_parquet(file_in)
+            dfs_final[year] = df
+
+    return dfs_final
+
+
+def test_imputed(years, dfs_final):
+    # tester que l'imputation a été bien effectuée
+    # on trie en ordre décroissant le pourcentage de valeurs manquantes
+    # on regarde la première valeur
+    for year in years:
+        df = dfs_final[year]
+
+        # Exclure HEIGHT et WEIGHT du test
+        cols_to_check = df.columns.difference(["HEIGHT", "WEIGHT"])
+        missing_values = df[cols_to_check].isna().mean().sort_values(ascending=False) * 100
+        assert missing_values.iloc[0] == 0.0, f"Erreur: première valeur non-nulle pour {year}"
+
+        mask = df["FORMTYPE"] != "T1"
+        for col in ["HEIGHT", "WEIGHT"]:
+            missing_pct = df.loc[mask, col].isna().mean() * 100
+            assert missing_pct == 0.0, f"Erreur : {col} contient des NA pour {year}"
+    print("---------------OK----------------------")
+
+
+def clean_gpd_dataframe(gdp):
+    gdp = gdp.replace({"(NA)": pd.NA})
+
+    # on garde un peu plus d'années en cas de valeurs manquantes pour imputer
+    years_to_drop = [str(y) for y in range(1998, 2018)]
+    gdp = gdp.drop(columns=[col for col in years_to_drop])
+
+    gdp = gdp.drop(columns=["IndustryClassification"])  # la colonne est vide
+    gdp = gdp.iloc[:-4]  # du footnote
+    gdp = gdp.drop(columns=["TableName"])  # ne rapporte aucune information
+
+    return gdp
+
+
+def merge_gdp_on_gdf(gdp, gdf):
+    # On veut faire la jointure entre la base géographique et la base économique
+
+    # Etape 1 : passage en format wide de la base économique
+    years_data = [str(y) for y in range(2018, 2025)]
+
+    gdp['indicator'] = gdp['Description'].str.strip()
+
+    # Pivoter
+    wide = gdp.pivot(
+        index=["GeoFIPS", "GeoName"],
+        columns="indicator",
+        values=years_data
+    )
+
+    # Changer le nom des colonnes
+    wide.columns = [f"{ind}_{year}" for (ind, year) in wide.columns]
+    gdp = wide.reset_index()
+
+    # Clé commune :
+    gdp["STATEFP"] = gdp["GeoFIPS"].str[2:4]
+
+    # Jointure :
+    df_eco_geo = gdp.merge(gdf, how="left")
+
+    return df_eco_geo
+
+
+def clean_enrichment_datasets(gdp, gdf):
+    gdp = clean_gpd_dataframe(gdp)
+    df = merge_gdp_on_gdf(gdp, gdf)
+    return df
