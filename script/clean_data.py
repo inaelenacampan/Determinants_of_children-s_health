@@ -313,6 +313,23 @@ def merge_gdp_on_gdf(gdp, gdf):
     return df_eco_geo
 
 
+def numeric_only(df, prefixes=[str(y) for y in range(2018, 2025)]):
+    """
+    Nettoyer les types de la base de données économiques.
+
+    Args :
+        df : dataframe
+
+    Returns:
+        dataframe
+    """
+
+    for col in df.columns:
+        if any(col.startswith(prefix) for prefix in prefixes):
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+    return df
+
+
 def clean_enrichment_datasets(gdp, gdf):
     """
     Regrouper les deux fonctions précédentes.
@@ -331,4 +348,5 @@ def clean_enrichment_datasets(gdp, gdf):
     df = df[df["GeoFIPS"] != ' "00000"']
 
     df = df.reset_index(drop=True)
+    df = numeric_only(df)
     return df

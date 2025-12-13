@@ -8,3 +8,4 @@ prince
 seaborn
 ipywidgets
 pdoc
+folium
