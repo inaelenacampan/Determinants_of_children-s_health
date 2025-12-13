@@ -326,4 +326,9 @@ def clean_enrichment_datasets(gdp, gdf):
     """
     gdp = clean_gpd_dataframe(gdp)
     df = merge_gdp_on_gdf(gdp, gdf)
+
+    # drop la ligne sur les états unis au niveau agrégé
+    df = df[df["GeoFIPS"] != ' "00000"']
+
+    df = df.reset_index(drop=True)
     return df
