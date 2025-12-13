@@ -5,6 +5,44 @@ import seaborn as sns
 from matplotlib.patches import Ellipse
 
 
+def bar_plot(year, dfs, variable, guide):
+    """
+    Réaliser un bar plot.
+
+    Args :
+        year (str) : années d'intéret
+        dfs (dict) : dictionnaire des bases de données
+        variable (str) : Le critère de regroupement.
+        guide (pd object) : Le guide des variables NSCH.
+
+    Returns : un bar plot
+    """
+
+    df = dfs[year]
+    ax = sns.countplot(data=df, x=variable)
+
+    # récuperer la signification du codage de la réponse
+    responde_str = guide.loc[guide["Variable"] == variable, "Response Code"].iloc[0]
+    code_dict = dict(item.split(' = ') for item in responde_str.split('||'))
+    question_text = guide.loc[guide["Variable"] == variable, "Question"].iloc[0]
+
+    # eviter l'affichage d'un warning lié au ticks
+    ticks = ax.get_xticks()
+    old_labels = [label.get_text() for label in ax.get_xticklabels()]
+
+    # on utilise le dictionnaire pour un affichage lisible
+    new_labels = [code_dict[name] for name in old_labels]
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(new_labels)
+
+    # pivoter les labels
+    plt.xticks(rotation=45, fontsize=8)
+    plt.xlabel("Réponse")
+    plt.ylabel("Effectif")
+    plt.title(f"Répartition de la variable d'intérêt \n{question_text}", fontsize=8)
+    plt.show()
+
+
 def mca_analysis(year, dfs, drop_columns):
     """
     Réaliser une ACM.
