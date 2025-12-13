@@ -252,3 +252,32 @@ def heatmap_generator(df):
 
     plt.suptitle("Clustermap de la matrice de corrélation", fontsize=16, y=1.02)
     plt.show()
+
+
+"""
+# brouillon affichage de PIB par état
+# idée : utiliser ce code pour la carte finale, quand on aura calculé les indices de santé par état
+year = 2024
+column  =f"{year}_Real GDP (millions of chained 2017 dollars) 1/"
+
+# convertion du type de la base de données
+
+gdf = gpd.GeoDataFrame(df_eco_geo, geometry='geometry')
+
+# Centrer la carte sur les USA
+m = folium.Map([43, -100], zoom_start=4)
+
+# Ajouter une carte choroplèthe
+folium.Choropleth(
+    geo_data=gdf,
+    data=df_eco_geo,
+    columns = ["GeoName",column],
+    key_on="feature.properties.GeoName",
+    fill_opacity=0.3,
+    line_weight=2,
+    highlight=True,
+    fill_color = "viridis"
+).add_to(m)
+
+m
+"""
