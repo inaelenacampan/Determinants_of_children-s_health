@@ -350,3 +350,76 @@ def clean_enrichment_datasets(gdp, gdf):
     df = df.reset_index(drop=True)
     df = numeric_only(df)
     return df
+
+
+def clean_eco_data(df_eco):
+    """
+    Nettoie les données économiques :
+    - suppression des colonnes inutiles (années anciennes, variables inutiles pour l'étude)
+    - renommage de STATEFP en FIPSST pour les jointures
+    """
+
+    # Variables économiques sans l'année (structure commune)
+    eco_vars_no_year = [
+        "Disposable personal income",
+        "Gross domestic product (GDP)",
+        "Implicit regional price deflator 10/",
+        "Per capita disposable personal income 7/",
+        "Per capita personal consumption expenditures (PCE) 8/",
+        "Per capita personal income 6/",
+        "Personal consumption expenditures",
+        "Personal income",
+        "Real GDP (millions of chained 2017 dollars) 1/",
+        "Real PCE (millions of constant (2017) dollars) 3/",
+        "Real per capita PCE 5/",
+        "Real per capita personal income 4/",
+        "Real personal income (millions of constant (2017) dollars) 2/",
+        "Regional price parities (RPPs) 9/",
+        "Total employment (number of jobs)"
+    ]
+
+    # Années entièrement supprimées
+    years_to_drop = [2018, 2019, 2020]
+
+    cols_to_drop = [
+        f"{year}_{var}"
+        for year in years_to_drop
+        for var in eco_vars_no_year
+    ]
+
+    # Suppressions partielles
+    cols_to_drop += [
+        "2021_Real PCE (millions of constant (2017) dollars) 3/",
+        "2021_Real per capita PCE 5/",
+        "2021_Real per capita personal income 4/",
+        "2021_Real personal income (millions of constant (2017) dollars) 2/",
+        "2022_Real PCE (millions of constant (2017) dollars) 3/",
+        "2022_Real per capita PCE 5/",
+        "2022_Real per capita personal income 4/",
+        "2022_Real personal income (millions of constant (2017) dollars) 2/",
+        "2023_Real PCE (millions of constant (2017) dollars) 3/",
+        "2023_Real per capita PCE 5/",
+        "2023_Real per capita personal income 4/",
+        "2023_Real personal income (millions of constant (2017) dollars) 2/",
+        "2021_Regional price parities (RPPs) 9/",
+        "2021_Implicit regional price deflator 10/",
+        "2022_Regional price parities (RPPs) 9/",
+        "2022_Implicit regional price deflator 10/",
+        "2023_Regional price parities (RPPs) 9/",
+        "2023_Implicit regional price deflator 10/"
+    ]
+
+    # Colonnes géographiques / techniques
+    cols_to_drop += [
+        "STATENS", "GEOIDFQ", "GEOID", "NAME",
+        "STUSPS", "LSAD", "ALAND", "AWATER", "geometry"
+    ]
+
+    df_eco_geo_indic = (
+        df_eco
+        .dropna(axis=1)
+        .rename(columns={"STATEFP": "FIPSST"})
+        .drop(columns=cols_to_drop, errors="ignore")
+    )
+
+    return df_eco_geo_indic
