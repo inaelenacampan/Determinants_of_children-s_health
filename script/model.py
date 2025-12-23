@@ -34,7 +34,9 @@ def state_indicator(df_theme, variables, theme, year, minimum, maximum):
     """
     -- add legend
     """
-    df_theme = df_theme.groupby("FIPSST").apply(
+    # groupby -- préciser les colonnes d'interet afin d'éviter des soucis avec la mise-a-jour pandas
+    # => les warnings disparaissent
+    df_theme = df_theme.groupby("FIPSST")[variables + ["FWC"]].apply(
         lambda g: pd.Series({var: weighted_mean(g[var], g["FWC"]) for var in variables}))
 
     X = df_theme[variables]
