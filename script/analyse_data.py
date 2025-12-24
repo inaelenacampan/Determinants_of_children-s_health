@@ -3,6 +3,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from matplotlib.patches import Ellipse
+import folium
+import geopandas as gpd  # pour la gestion des données géographiques (fichiers .shp)
+import branca
+import ipywidgets as widgets
+from IPython.display import display
+from IPython.display import clear_output
 
 
 def bar_plot(year, dfs, variable, guide):
@@ -254,30 +260,74 @@ def heatmap_generator(df):
     plt.show()
 
 
-"""
-# brouillon affichage de PIB par état
-# idée : utiliser ce code pour la carte finale, quand on aura calculé les indices de santé par état
-year = 2024
-column  =f"{year}_Real GDP (millions of chained 2017 dollars) 1/"
+def map_united_states(df_indicator, df_geo, year):
 
-# convertion du type de la base de données
+    """
+    cf. tutotoriel :
+    https://python-visualization.github.io/folium/latest/user_guide/geojson/geojson_popup_and_tooltip.html
+    """
 
-gdf = gpd.GeoDataFrame(df_eco_geo, geometry='geometry')
+    new_df = df_geo.copy()
+    new_df["FIPSST"] = new_df["GeoFIPS"].str.replace('"', '').str.strip().str[:-3].astype(int)
 
-# Centrer la carte sur les USA
-m = folium.Map([43, -100], zoom_start=4)
+    gdf = gpd.GeoDataFrame(new_df, geometry='geometry')
+    df_indicator = df_indicator.rename_axis('FIPSST')
 
-# Ajouter une carte choroplèthe
-folium.Choropleth(
-    geo_data=gdf,
-    data=df_eco_geo,
-    columns = ["GeoName",column],
-    key_on="feature.properties.GeoName",
-    fill_opacity=0.3,
-    line_weight=2,
-    highlight=True,
-    fill_color = "viridis"
-).add_to(m)
+    # Merge pour ajouter l'indicateur dans gdf
+    gdf = gdf.merge(df_indicator, on="FIPSST", how="left")
 
-m
-"""
+    # Centrer la carte sur les USA
+    m = folium.Map([43, -100], zoom_start=4, min_zoom=3, max_zoom=6)
+
+    # Créer une échelle de couleur propre : rouge ---> vert
+    colormap = branca.colormap.LinearColormap(
+        vmin=gdf[f"indicator_global_health_{year}"].min(),
+        vmax=gdf[f"indicator_global_health_{year}"].max(),
+        colors=["red", "orange", "lightblue", "green", "darkgreen"],
+        caption=f"Indice global de santé (0-1) pour l'année {year}"
+    )
+
+    # ajout des polygones et des messages
+    folium.GeoJson(
+        gdf,
+        style_function=lambda feature: {
+            'fillColor': colormap(feature['properties'][f'indicator_global_health_{year}']),
+            'color': 'black',
+            'weight': 0.5,
+            'fillOpacity': 0.8,
+        },
+        tooltip=folium.GeoJsonTooltip(
+            fields=["GeoName", f"indicator_global_health_{year}"],
+            aliases=["État:", "Indice santé :"],
+            localize=True
+        )
+    ).add_to(m)
+
+    # Ajouter la légende du colormap
+    colormap.add_to(m)
+
+    return m
+
+
+def interactive_map(df_indicator, df_geo):
+    """
+    """
+    years = ["2021", "2022", "2023", "2024"]
+    year_selector = widgets.Dropdown(
+        options=years,
+        value="2024",
+        description='Année:',
+    )
+    output = widgets.Output()
+
+    def update_map(change):
+        """
+        """
+        with output:
+            clear_output(wait=True)
+            display(map_united_states(df_indicator, df_geo, year=change['new']))
+
+    year_selector.observe(update_map, names='value')
+    display(year_selector, output)
+    with output:
+        display(map_united_states(df_indicator, df_geo, year=year_selector.value))
