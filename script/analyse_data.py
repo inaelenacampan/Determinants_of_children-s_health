@@ -9,6 +9,8 @@ import branca
 import ipywidgets as widgets
 from IPython.display import display
 from IPython.display import clear_output
+from scipy.stats import kendalltau
+import pandas as pd
 
 
 def bar_plot(year, dfs, variable, guide):
@@ -347,7 +349,7 @@ def interactive_map(df_indicator, df_geo):
     l'évolution d'un indicateur global de santé des enfants selon l'année.
 
     Cette fonction utilise des widgets ipywidgets pour créer un menu
-    déroulant de sélection de '’année. Lorsque l'année change, la carte
+    déroulant de sélection de l'année. Lorsque l'année change, la carte
     choroplèthe correspondante est automatiquement mise à jour.
 
     Args:
@@ -386,3 +388,49 @@ def interactive_map(df_indicator, df_geo):
     display(year_selector, output)
     with output:
         display(map_united_states(df_indicator, df_geo, year=year_selector.value))
+
+
+def kendall_analysis(df_indicator):
+    """
+    Calcule le taux de Kendall (tau) entre l'indicateur global de santé et
+    plusieurs sous-indicateurs pour chaque année, et retourne un DataFrame récapitulatif.
+
+    Args:
+        df_indicator : pandas.DataFrame
+            DataFrame contenant les colonnes suivantes pour chaque année :
+            - indicator_global_health_{year}
+            - sub_indicator_eco_{year}
+            - sub_indicator_health_{year}
+            - sub_indicator_mental_{year}
+
+    Returns:
+        pandas.DataFrame
+            DataFrame contenant pour chaque sous-indicateur et chaque année :
+            - Year : l'année
+            - Sub_indicator : le nom du sous-indicateur
+            - Kendall_tau : le taux de Kendall entre le sous-indicateur et l'indicateur global
+            - p_value : la p-value du test de Kendall
+    """
+
+    years = ["2024", "2023", "2022", "2021"]
+    sub_indicators = ["sub_indicator_eco", "sub_indicator_health", "sub_indicator_mental"]
+
+    results = []
+
+    for year in years:
+        for sub in sub_indicators:
+            # Calcul du tau de Kendall et de la p-value pour tester la signification statistique
+            tau, p_value = kendalltau(
+                df_indicator[f"indicator_global_health_{year}"],
+                df_indicator[f"{sub}_{year}"]
+            )
+
+            results.append({
+                "Year": year,
+                "Sub_indicator": sub,
+                "Kendall_tau": tau,
+                "p_value": p_value
+            })
+
+    # Retourner un DataFrame
+    return pd.DataFrame(results)
