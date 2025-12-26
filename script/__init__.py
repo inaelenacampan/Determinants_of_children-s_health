@@ -6,4 +6,5 @@ Ce package fournit des fonctions d'appui pour la génération du notebook princi
 Modules principaux :
 - clean_data.py : contient les fonctions de lecture, écriture, nettoyage, imputation.
 - analyse_data.py : contient les fonctions de visualisation.
+- model.py : contient les fonctions liés à la construction de l'indice synthètique de santé.
 """
