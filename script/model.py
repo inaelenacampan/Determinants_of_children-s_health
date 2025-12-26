@@ -12,13 +12,56 @@ def weighted_mean(x, w):
     Args :
         x : variable numérique
         w : poids
+
+    Returns:
+        float - moyenne pondérée
     """
     return (x * w).sum() / w.sum()
 
 
 def scale_transformation(year, dfs, variables, cat_variables, bin_variables, groups, theme):
     """
-    -- add legend
+    Applique des transformations d'échelle et d'orientation aux variables
+    d'un thème donné.
+
+    Cette fonction permet :
+    - de sélectionner les variables pertinentes pour une année donnée,
+    - d'harmoniser le sens des variables catégorielles (inversion d'échelle),
+    - de transformer les variables binaires selon la logique du thème étudié.
+
+    Args:
+        year : str
+            Année d'analyse utilisée pour extraire le DataFrame correspondant.
+
+        dfs : dict
+            Dictionnaire de DataFrames indexé par année.
+
+        variables : list
+            Liste des variables quantitatives à inclure dans l'analyse.
+
+        cat_variables : list
+            Liste des variables catégorielles ordinales codées sur une échelle
+            de 1 à 5, dont le sens doit être inversé afin que des valeurs plus
+            élevées correspondent à une meilleure situation de santé.
+
+        bin_variables : list
+            Liste des variables binaires (codées 1/2) nécessitant une
+            transformation spécifique.
+
+        groups : list
+            Liste de variables supplémentaires (variables de regroupement et de poids)
+            à conserver dans le DataFrame final.
+
+        theme : str
+            Thème d'analyse. Lorsque le thème est "micro_eco", les variables
+            binaires sont transformées de façon symétrique ; sinon, une
+            transformation standard est appliquée.
+
+    Returns:
+        pandas.DataFrame
+            DataFrame contenant uniquement les variables sélectionnées,
+            après transformation des échelles et harmonisation du sens
+            des indicateurs.
     """
     # extract dataframe
     df = dfs[year]
@@ -41,7 +84,40 @@ def scale_transformation(year, dfs, variables, cat_variables, bin_variables, gro
 
 def state_indicator(df_theme, variables, theme, year, minimum, maximum):
     """
-    -- add legend
+    Calcule un sous-indicateur de santé agrégé par État pour un thème donné
+    et une année donnée.
+
+    Args:
+        df_theme : pandas.DataFrame
+            DataFrame contenant les variables thématiques déjà transformées
+            (échelles harmonisées), ainsi que les colonnes :
+            - "FIPSST" : code de l'État
+            - "FWC" : poids utilisés pour le calcul des moyennes pondérées.
+
+        variables : list
+            Liste des variables quantitatives entrant dans le calcul
+            du sous-indicateur.
+
+        theme : str
+            Nom du thème étudié ("micro_eco", "health", "mental_health"),
+            utilisé pour nommer la colonne du sous-indicateur.
+
+        year : str
+            Année d'analyse, utilisée pour nommer la colonne du sous-indicateur.
+
+        minimum : float
+            Valeur minimale théorique utilisée pour la
+            normalisation du sous-indicateur.
+
+        maximum : float
+            Valeur maximale théorique utilisée pour la
+            normalisation du sous-indicateur.
+
+    Returns:
+        pandas.Series
+            Série indexée par le code FIPS des États (FIPSST) contenant
+            le sous-indicateur normalisé sur l'intervalle [0, 1] pour
+            le thème et l'année considérés.
     """
     # groupby -- préciser les colonnes d'interet afin d'éviter des soucis avec la mise-a-jour pandas
     # => les warnings disparaissent
@@ -73,7 +149,29 @@ def calculate_indicator(year, dfs, theme, cat_variables, bin_variables, groups):
 
 def economic_pca_indicator(df, state_eco_vars, year):
     """
-    ---- to be defined
+    Construit un sous-indicateur macro-économique de santé au niveau des États
+    à l'aide d'une Analyse en Composantes Principales (ACP).
+
+
+    Args:
+        df : pandas.DataFrame
+            DataFrame contenant les variables macro-économiques par État.
+            Doit inclure une colonne "FIPSST" ainsi que les variables listées
+            dans `state_eco_vars`.
+
+        state_eco_vars : list
+            Liste des variables macro-économiques quantitatives utilisées
+            pour la construction du sous-indicateur.
+
+        year : str
+            Année d'analyse, utilisée pour nommer la colonne du sous-indicateur.
+
+    Returns:
+        pandas.DataFrame
+            DataFrame contenant :
+            - la colonne "FIPSST" (code de l'État),
+            - la colonne "sub_indicator_macroeco_<year>" correspondant
+            au sous-indicateur macro-économique normalisé sur [0, 1].
     """
     df_macro_state = df[["FIPSST"] + state_eco_vars].copy()
     X = df_macro_state[state_eco_vars]
@@ -107,7 +205,47 @@ def economic_pca_indicator(df, state_eco_vars, year):
 def average_economic_indicator(year, df_eco, dfs, theme, cat_variables, bin_variables, groups,
                                state_eco_vars_dict):
     """
-    --- to be defined
+    Construit un sous-indicateur économique global par État en combinant
+    des dimensions micro-économiques et macro-économiques.
+
+    Args:
+        year : str
+            Année d'analyse utilisée pour sélectionner les données et nommer
+            les colonnes des sous-indicateurs.
+
+        df_eco : pandas.DataFrame
+            DataFrame contenant les variables macro-économiques par État,
+            incluant la colonne "FIPSST".
+
+        dfs : dict
+            Dictionnaire de DataFrames indexé par année contenant les données
+            micro-économiques issues de l'enquête NSCH.
+
+        theme : str
+            Nom du thème micro-économique utilisé pour la construction du
+            sous-indicateur issu des données individuelles.
+
+        cat_variables : list
+            Liste des variables catégorielles ordinales nécessitant une
+            transformation d'échelle.
+
+        bin_variables : list
+            Liste des variables binaires à transformer selon la logique
+            du thème étudié.
+
+        groups : list
+            Liste de variables supplémentaires conservées lors du calcul
+            du sous-indicateur micro-économique.
+
+        state_eco_vars_dict : dict
+            Dictionnaire associant à chaque année la liste des variables
+            macro-économiques utilisées dans l'ACP.
+
+    Returns:
+        pandas.Series
+            Série indexée par le code FIPS des États (FIPSST) contenant
+            le sous-indicateur économique global normalisé sur l'intervalle
+            [0, 1] pour l'année considérée.
     """
     indicator_NSCH = calculate_indicator(year, dfs, theme, cat_variables, bin_variables, groups)
     state_eco_vars = state_eco_vars_dict[year]
@@ -126,8 +264,75 @@ def over_all_indicators_year(year, df_eco, dfs, groups,
                              NSCH_eco_cat_vars, NSCH_eco_bin_vars,
                              state_eco_vars_dict):
     """
-    --- to be defined
+    Calcule l'ensemble des sous-indicateurs thématiques de santé des enfants
+    au niveau des États pour une année donnée.
+
+    Cette fonction construit trois dimensions :
+    - un sous-indicateur de santé mentale,
+    - un sous-indicateur de santé physique,
+    - un sous-indicateur économique combinant des dimensions micro-
+      et macro-économiques.
+
+    Chaque sous-indicateur est normalisé sur l'intervalle [0, 1] et
+    agrégé au niveau des États (FIPSST).
+
+    Args:
+        year : str
+            Année d'analyse utilisée pour sélectionner les données et nommer
+            les colonnes des sous-indicateurs.
+
+        df_eco : pandas.DataFrame
+            DataFrame contenant les variables macro-économiques par État,
+            incluant la colonne "FIPSST".
+
+        dfs : dict
+            Dictionnaire de DataFrames indexé par année contenant les données
+            issues de l'enquête NSCH.
+
+        groups : list
+            Liste des variables de regroupement ou de pondération utilisées
+            lors de l'agrégation au niveau des États.
+
+        mental_category_vars : list
+            Liste des variables catégorielles ordinales utilisées pour la
+            construction du sous-indicateur de santé mentale.
+
+        mental_bin_vars : list
+            Liste des variables binaires utilisées pour la construction du
+            sous-indicateur de santé mentale.
+
+        health_category_vars : list
+            Liste des variables catégorielles ordinales utilisées pour la
+            construction du sous-indicateur de santé physique.
+
+        health_bin_vars : list
+            Liste des variables binaires utilisées pour la construction du
+            sous-indicateur de santé physique.
+
+        NSCH_eco_cat_vars : list
+            Liste des variables catégorielles ordinales issues de l’enquête
+            NSCH utilisées pour la dimension micro-économique.
+
+        NSCH_eco_bin_vars : list
+            Liste des variables binaires issues de l’enquête NSCH utilisées
+            pour la dimension micro-économique.
+
+        state_eco_vars_dict : dict
+            Dictionnaire associant à chaque année la liste des variables
+            macro-économiques utilisées dans la construction de l’indicateur
+            économique.
+
+    Returns:
+        tuple of pandas.DataFrame
+            Tuple contenant trois DataFrames indexés par le code FIPS des États :
+            - sous-indicateur de santé mentale,
+            - sous-indicateur de santé physique,
+            - sous-indicateur économique.
+
+        Chaque DataFrame contient une unique colonne correspondant
+        au sous-indicateur et à l'année considérée.
     """
+
     mental_indicator = calculate_indicator(year, dfs, "mental_health", mental_category_vars,
                                            mental_bin_vars, groups)
     mental_indicator = mental_indicator.to_frame(name=f"sub_indicator_mental_{year}")
@@ -152,8 +357,62 @@ def global_health_over_years(years, df_eco, dfs, groups,
                              health_category_vars, health_bin_vars,
                              NSCH_eco_cat_vars, NSCH_eco_bin_vars,
                              state_eco_vars_dict):
+
     """
-    ----- to be defined
+    Construit l'indicateur global de santé des enfants aux États-Unis
+    pour plusieurs années, au niveau des États.
+
+    Args:
+        years : list
+            Liste des années d'analyse.
+
+        df_eco : pandas.DataFrame
+            DataFrame contenant les variables macro-économiques par État,
+            incluant la colonne "FIPSST".
+
+        dfs : dict
+            Dictionnaire de DataFrames indexé par année contenant les données
+            issues de l'enquête NSCH.
+
+        groups : list
+            Liste des variables de regroupement ou de pondération utilisées
+            lors de l'agrégation au niveau des États.
+
+        mental_category_vars : list
+            Liste des variables catégorielles ordinales utilisées pour la
+            construction du sous-indicateur de santé mentale.
+
+        mental_bin_vars : list
+            Liste des variables binaires utilisées pour la construction du
+            sous-indicateur de santé mentale.
+
+        health_category_vars : list
+            Liste des variables catégorielles ordinales utilisées pour la
+            construction du sous-indicateur de santé physique.
+
+        health_bin_vars : list
+            Liste des variables binaires utilisées pour la construction du
+            sous-indicateur de santé physique.
+
+        NSCH_eco_cat_vars : list
+            Liste des variables catégorielles ordinales issues de l’enquête
+            NSCH utilisées pour la dimension micro-économique.
+
+        NSCH_eco_bin_vars : list
+            Liste des variables binaires issues de l’enquête NSCH utilisées
+            pour la dimension micro-économique.
+
+        state_eco_vars_dict : dict
+            Dictionnaire associant à chaque année la liste des variables
+            macro-économiques utilisées dans la construction de l'indicateur
+            économique.
+
+    Returns:
+        pandas.DataFrame
+            DataFrame indexé par le code FIPS des États (FIPSST) contenant :
+            - l'ensemble des sous-indicateurs thématiques par année,
+            - l'indicateur global de santé des enfants
+            ("indicator_global_health_<year>") pour chaque année analysée.
     """
     indicators_dfs = []
     for year in years:
