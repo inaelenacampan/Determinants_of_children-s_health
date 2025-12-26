@@ -261,9 +261,41 @@ def heatmap_generator(df):
 
 
 def map_united_states(df_indicator, df_geo, year):
-
     """
-    cf. tutotoriel :
+    Crée une carte choroplèthe interactive des États-Unis représentant
+    un indicateur global de santé des enfants pour une année donnée.
+
+    La carte est générée à l’aide de Folium à partir de données géographiques
+    (GeoDataFrame) et d’un DataFrame contenant les indicateurs de santé.
+    Chaque État est coloré selon la valeur de l’indicateur, allant du rouge
+    (faible niveau de santé) au vert foncé (meilleur niveau de santé).
+
+    Args:
+        df_indicator : pandas.DataFrame
+            DataFrame contenant l'indicateur de santé par État.
+            L'index doit correspondre au code FIPS des États (FIPSST).
+            Il doit contenir une colonne nommée :
+            "indicator_global_health_<year>".
+
+        df_geo : geopandas.GeoDataFrame
+            GeoDataFrame contenant les polygones des États américains.
+            Doit inclure les colonnes :
+            - "GeoFIPS" : code FIPS sous forme de chaîne
+            - "GeoName" : nom de l'État
+            - "geometry" : géométrie des États
+
+        year : str
+            Année de l'indicateur de santé à afficher sur la carte.
+
+    Returns:
+        folium.Map
+            Objet Folium représentant la carte interactive des États-Unis,
+            avec une légende et des infobulles affichant le nom de l'État
+            et la valeur de l'indicateur de santé.
+
+    Références
+    ----------
+    Tutoriel Folium utilisé :
     https://python-visualization.github.io/folium/latest/user_guide/geojson/geojson_popup_and_tooltip.html
     """
 
@@ -311,7 +343,30 @@ def map_united_states(df_indicator, df_geo, year):
 
 def interactive_map(df_indicator, df_geo):
     """
+    Affiche une carte interactive des États-Unis permettant de visualiser
+    l'évolution d'un indicateur global de santé des enfants selon l'année.
+
+    Cette fonction utilise des widgets ipywidgets pour créer un menu
+    déroulant de sélection de '’année. Lorsque l'année change, la carte
+    choroplèthe correspondante est automatiquement mise à jour.
+
+    Args:
+        df_indicator : pandas.DataFrame
+            DataFrame contenant les indicateurs de santé par État et par année.
+            L'index doit correspondre au code FIPS des États (FIPSST).
+            Les colonnes doivent être nommées sous la forme :
+            "indicator_global_health_<year>".
+
+        df_geo : geopandas.GeoDataFrame
+            GeoDataFrame contenant les informations géographiques des États
+            américains (polygones, noms des États et codes FIPS).
+
+    Returns:
+        None
+            La fonction ne retourne rien. Elle affiche directement un widget
+            interactif et une carte Folium dans le notebook Jupyter.
     """
+
     years = ["2021", "2022", "2023", "2024"]
     year_selector = widgets.Dropdown(
         options=years,
