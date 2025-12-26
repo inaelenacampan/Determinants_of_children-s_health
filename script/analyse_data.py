@@ -420,9 +420,14 @@ def kendall_analysis(df_indicator):
     for year in years:
         for sub in sub_indicators:
             # Calcul du tau de Kendall et de la p-value pour tester la signification statistique
+            df1 = df_indicator[f"indicator_global_health_{year}"].sort_values(ascending=True)
+            df_global = df1.index.tolist()
+
+            df2 = df_indicator[f"{sub}_{year}"].sort_values(ascending=True)
+            df_sub = df2.index.tolist()
+
             tau, p_value = kendalltau(
-                df_indicator[f"indicator_global_health_{year}"],
-                df_indicator[f"{sub}_{year}"]
+                df_global, df_sub
             )
 
             results.append({
