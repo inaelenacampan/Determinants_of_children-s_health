@@ -39,7 +39,7 @@ Pour comprendre la structure des données, nous effectuons une analyse des corre
 
 La fichier qui décrit l'ensemble des résultats en détail est "Determinants_of_children-s_health.ipynb".
 
-Dans un terminal, commencez par la commande : 
+Dans un terminal (depuis le dossier ```Determinants_of_children-s_health```), commencez par la commande : 
 ```bash
 pip install -r requirements.txt 
 ```

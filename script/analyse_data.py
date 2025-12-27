@@ -262,6 +262,38 @@ def heatmap_generator(df):
     plt.show()
 
 
+def boxplot_image(title, y_label, column):
+    """
+    Génère une boîte à moustaches (boxplot) pour une variable numérique et un violin plot.
+
+    Args :
+        title : str
+            Titre du graphique.
+        y_label : str
+            Libellé de l'axe des ordonnées.
+        column : pandas.Series
+            Série contenant les valeurs numériques à représenter.
+
+    Returns:
+        None
+    """
+    plt.figure(figsize=(8, 6))
+
+    plt.subplot(1, 2, 1)
+    plt.boxplot(column.values, vert=True, showmeans=True)
+    plt.title("Boxplot")
+    plt.ylabel(y_label)
+
+    plt.subplot(1, 2, 2)
+    plt.violinplot(column.values, showmedians=True, showmeans=True)
+    plt.title("Violin plot")
+
+    plt.suptitle(title)
+
+    plt.tight_layout()
+    plt.show()
+
+
 def map_united_states(df_indicator, df_geo, year):
     """
     Crée une carte choroplèthe interactive des États-Unis représentant
