@@ -45,7 +45,7 @@ def lecture_fichier_sas(fs, chemin_lecture, chemin_ecriture):
     return dfs
 
 
-def lecture_fichier_csv(fs, chemin_lecture, chemin_ecriture):
+def lecture_fichier_csv(fs, chemin_lecture, chemin_ecriture, guide_ind):
     """
     Lecture des fichiers csv.
 
@@ -53,12 +53,18 @@ def lecture_fichier_csv(fs, chemin_lecture, chemin_ecriture):
         fs : abstraction du filesystem
         chemin_lecture (str)
         chemin_ecriture (str)
+        guide (bool)
 
     Returns:
         génération d'un objet dataframe
     """
     lecture_fichier(fs, chemin_lecture, chemin_ecriture)
-    guide = pd.read_csv(chemin_ecriture, index_col=False)
+    if guide_ind is True:
+        guide = pd.read_csv(chemin_ecriture, index_col=False)
+    else:
+        guide = pd.read_csv(chemin_ecriture, index_col=False, encoding='ISO-8859-1',
+                            low_memory=False)
+
     return guide
 
 
