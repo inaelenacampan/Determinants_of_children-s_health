@@ -58,3 +58,4 @@ pdoc script
 
 ## Résultats principaux et conclusions <a name="subheading-6">
 ![Carte interactive](docs/USA_Map_2024.png)
+![Classement des états](docs/classement_etats_sante.jpg)

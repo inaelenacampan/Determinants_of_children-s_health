@@ -426,16 +426,108 @@ def kendall_analysis(df_indicator):
             df2 = df_indicator[f"{sub}_{year}"].sort_values(ascending=True)
             df_sub = df2.index.tolist()
 
-            tau, p_value = kendalltau(
+            tau, _ = kendalltau(
                 df_global, df_sub
             )
 
             results.append({
                 "Year": year,
                 "Sub_indicator": sub,
-                "Kendall_tau": tau,
-                "p_value": p_value
+                "Kendall_tau": tau
             })
 
     # Retourner un DataFrame
     return pd.DataFrame(results)
+
+
+def state_rankings(df_indicator, df_geo):
+    """
+    Génère et sauvegarde une heatmap représentant le classement des États
+    américains selon un indicateur global de santé pour plusieurs années.
+
+    La fonction associe les scores de santé contenus dans `df_indicator`
+    aux noms des États présents dans `df_geo`, calcule les classements
+    annuels (1 = meilleur État), puis affiche une matrice colorée où les
+    lignes correspondent aux États et les colonnes aux années. Les États
+    sont triés selon leur classement pour l'année la plus récente (2024).
+
+    Le graphique utilise une échelle de couleurs allant du vert (meilleur
+    classement) au rouge (moins bon classement), avec les années affichées
+    en haut du tableau.
+
+    Args:
+        df_indicator : pandas.DataFrame
+            Table contenant les indicateurs globaux de santé par État, indexée
+            par le code FIPS des États (FIPSST). Les colonnes doivent suivre la
+            convention de nommage :
+            `indicator_global_health_<année>`.
+
+        df_geo : pandas.DataFrame
+            Table de correspondance géographique contenant les informations
+            des États. Doit inclure les colonnes :
+            - `GeoFIPS` : code FIPS géographique de l'État
+            - `GeoName` : nom de l'État
+
+    Returns:
+    None
+        La fonction affiche le graphique et l'enregistre au format JPG
+        dans le dossier `docs/`.
+    """
+
+    df = df_indicator.reset_index()
+    new_df = df_geo.copy()
+    new_df["FIPSST"] = new_df["GeoFIPS"].str.replace('"', '').str.strip().str[:-3].astype(int)
+    df = df.merge(
+        new_df[['FIPSST', 'GeoName']],
+        on='FIPSST',
+        how='left'
+    )
+    df = df.set_index('GeoName')
+    years = [2024, 2023, 2023, 2021]
+    cols = [f'indicator_global_health_{y}' for y in years]
+
+    df_scores = df[cols]
+    df_rank = df_scores.rank(
+        axis=0,
+        ascending=False,   # Meilleur état - score le plus grand
+        method='min'
+    )
+    # renommer les colonnes
+    df_rank.columns = [str(y) for y in years]
+
+    # classement de référence : l'année 2024
+    df_rank = df_rank.sort_values(by='2024')
+
+    plt.figure(figsize=(15, 30))
+    ax = sns.heatmap(
+        df_rank,
+        annot=True,
+        fmt=".0f",
+        cmap="RdYlGn_r",   # échelle : rouge (pire) ---> vert (meilleur)
+        cbar_kws={'label': 'Classement'}
+    )
+
+    # années affichées en haut du plot
+
+    ax.xaxis.tick_top()
+    ax.xaxis.set_label_position('top')
+    ax.set_xlabel("Année")
+
+    plt.title("Classement santé globale par État")
+    plt.ylabel("État")
+
+    # afficher la légénde de telle sorte que le vert soit en haut et le rouge en bas
+    cbar = ax.collections[0].colorbar
+    cbar.ax.invert_yaxis()
+
+    plt.tight_layout()
+
+    # sauvegarde au format jpg ---> inclusion dans le readMe
+    plt.savefig(
+        "docs/classement_etats_sante.jpg",
+        format="jpg",
+        dpi=300,
+        bbox_inches="tight"
+    )
+
+    plt.show()

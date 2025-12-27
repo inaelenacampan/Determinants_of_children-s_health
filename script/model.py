@@ -69,8 +69,8 @@ def scale_transformation(year, dfs, variables, cat_variables, bin_variables, gro
     all_variables = list(set(variables) | set(groups))
 
     df_theme = df[all_variables].copy()
-
-    df_theme[cat_variables] = 6 - df_theme[cat_variables]
+    for col in cat_variables:
+        df_theme[col] = df_theme[col].nunique() + 1 - df_theme[col]
 
     if theme == "micro_eco":
         for var in bin_variables:
