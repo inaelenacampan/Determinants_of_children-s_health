@@ -97,7 +97,7 @@ Dans la construction de nos indicateurs, nous avons remarqué que ceux-ci sont s
 
 ![Boxplot 2023](docs/boxplot_2023.png)
 
-Via une carte interactive, on visualise les indicateurs au niveau de chaque État. Visuellement, les États en meilleure santé se situent sur la côte Est des États-Unis (Californie, New York, Pennsylvanie). On observe également une validation de la première loi de la géographie de Waldo Tobler : « Tout est lié à tout le reste, mais les choses proches sont plus liées que les choses éloignées. » Effectivement, sur la côte Est, plusieurs États en « bonne santé » sont des voisins, tandis que la santé se dégrade petit à petit vers le centre des États-Unis.
+Via une carte interactive, on visualise les indicateurs au niveau de chaque État. Visuellement, les États en meilleure santé se situent sur la côte Est des États-Unis (New York, Pennsylvanie). On observe également une validation de la première loi de la géographie de Waldo Tobler : « Tout est lié à tout le reste, mais les choses proches sont plus liées que les choses éloignées. » Effectivement, sur la côte Est, plusieurs États en « bonne santé » sont des voisins, tandis que la santé se dégrade petit à petit vers le centre des États-Unis.
 
 ![Carte interactive](docs/USA_Map_2024.png)
 
