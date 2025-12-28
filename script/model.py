@@ -69,8 +69,11 @@ def scale_transformation(year, dfs, variables, cat_variables, bin_variables, gro
     all_variables = list(set(variables) | set(groups))
 
     df_theme = df[all_variables].copy()
-    for col in cat_variables:
-        df_theme[col] = df_theme[col].nunique() + 1 - df_theme[col]
+    if theme == "health":
+        df_theme[cat_variables] = 6 - df_theme[cat_variables]
+    else:
+        for col in cat_variables:
+            df_theme[col] = df_theme[col].nunique() + 1 - df_theme[col]
 
     if theme == "micro_eco":
         for var in bin_variables:
@@ -431,3 +434,78 @@ def global_health_over_years(years, df_eco, dfs, groups,
              indicators_dfs[f"sub_indicator_eco_{year}"])**(1/3)
 
     return indicators_dfs
+
+
+def comparison_new_indicator(annual_report, df_global_indicator, df_eco):
+    """
+    """
+    measures_to_keep = [
+        "Social and Economic Factors", "Behaviors",
+        "Clinical Care", "Health Outcomes", "Physical Environment"
+    ]
+
+    weight_dict = {
+        "Social and Economic Factors": 0.3,
+        "Physical Environment": 0.1,
+        "Clinical Care": 0.15,
+        "Behaviors": 0.2,
+        "Health Outcomes": 0.25
+    }
+
+    geo_fips_clean = (
+                        df_eco["GeoFIPS"]
+                        .str.replace('"', '')
+                        .str.strip()
+                        .str[:-3]
+                        .astype(str)
+                        .str.lstrip('0')
+    )
+
+    state_to_fips = dict(zip(df_eco["STUSPS"], geo_fips_clean))
+
+    # ---------------------------
+    # Filtrage et sélection des colonnes
+    # ---------------------------
+    df = annual_report[annual_report["Measure"].isin(measures_to_keep)][["Measure", "State",
+                                                                         "Score"]].copy()
+
+    # ---------------------------
+    # Ajout des poids
+    # ---------------------------
+    df["Weight"] = df["Measure"].map(weight_dict)
+
+    # ---------------------------
+    # Calcul de la moyenne pondérée globale par État
+    # ---------------------------
+    df["global_indicator_UHF"] = (df["Score"] * df["Weight"]) \
+        .groupby(df["State"]).transform('sum') / df.groupby("State")["Weight"].transform('sum')
+
+    # ---------------------------
+    # Étape 4 : ajout du code FIPS
+    # ---------------------------
+    df["FIPSST"] = df["State"].map(state_to_fips).astype(str)
+    df_global_indicator.index = df_global_indicator.index.astype(str)
+
+    # ---------------------------
+    # Étape 5 : garder 1 ligne par État pour fusionner
+    # ---------------------------
+    df_state = df.groupby("FIPSST", as_index=False)["global_indicator_UHF"].first()
+
+    # ---------------------------
+    # Étape 6 : merge avec df_global_indicator
+    # ---------------------------
+    df_final = df_state.set_index("FIPSST").join(
+        df_global_indicator[["indicator_global_health_2024", "sub_indicator_health_2024",
+                             "sub_indicator_mental_2024", "sub_indicator_eco_2024"]],
+        how="inner"
+    ).reset_index()
+
+    # Sélection des colonnes finales
+    df_final = df_final[["FIPSST",
+                         "indicator_global_health_2024",
+                         "global_indicator_UHF",
+                         "sub_indicator_health_2024",
+                         "sub_indicator_mental_2024",
+                         "sub_indicator_eco_2024"]]
+
+    return df_final

@@ -51,6 +51,42 @@ def bar_plot(year, dfs, variable, guide):
     plt.show()
 
 
+def interactive_barplot(variables, dfs, df_guide):
+    """
+    Créer un bar plot intéractif.
+
+    Args :
+        variables (set) : options de variables qui sont à visualiser
+        dfs (dict) : dictionnaire des bases de données
+        df_guide (dataframe) : dataframe du guide des variables
+
+    Returns:
+        None
+    """
+
+    year_selector = widgets.Dropdown(
+        options=["2024", "2023", "2022", "2021"],
+        description='Année',
+        value="2023"
+    )
+
+    var_selector = widgets.Dropdown(
+        options=list(variables),
+        description='Variable:',
+        value='BREATHING'
+    )
+
+    interactive_plot = widgets.interactive(
+        bar_plot,
+        variable=var_selector,
+        year=year_selector,
+        dfs=widgets.fixed(dfs),
+        guide=widgets.fixed(df_guide)
+    )
+
+    display(interactive_plot)
+
+
 def mca_analysis(year, dfs, drop_columns):
     """
     Réaliser une ACM.
