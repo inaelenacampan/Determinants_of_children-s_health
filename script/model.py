@@ -438,7 +438,16 @@ def global_health_over_years(years, df_eco, dfs, groups,
 
 def comparison_new_indicator(annual_report, df_global_indicator, df_eco):
     """
+    Effectuer la comparaison de l'indicateur produit avec l'indicateur d'America's Health Rankings.
+    Args :
+        annual_report (dataframe) : base de données d'America's Health Rankings
+        df_global_indicator (dataframe) : base de données de l'indicateur produit
+        df_eco (dataframe) : base de données economique permetant de récupérer la correspondance
+        entre le nom et le code d'un état
+    Returns:
+        un dataframe obtenu suite à une jointure entre l'indicateur UHF et notre modélisation
     """
+
     measures_to_keep = [
         "Social and Economic Factors", "Behaviors",
         "Clinical Care", "Health Outcomes", "Physical Environment"
