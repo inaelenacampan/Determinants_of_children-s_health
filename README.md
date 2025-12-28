@@ -20,7 +20,7 @@ S'intéresser à la santé des enfants, c’est aussi s’intéresser à la sant
 
 ### État de santé des enfants aux États-Unis
 
-Selon Forrest et al. (2025) et le rapport de l'UNICEF sur le bien-être des enfants (2022),  la santé des enfants s’est détériorée aux États-Unis lors des 17 dernières années. Trois critères sont étudiés plus en détails : 
+Selon Forrest et al. (2025) et le rapport de l'UNICEF sur le bien-être des enfants (2013),  la santé des enfants s’est détériorée aux États-Unis lors des 17 dernières années. Trois critères sont étudiés plus en détails : 
 
 * La mortalité des enfants : les nourrissons et les 1-19 ont beaucoup plus de chances de décéder aux États-Unis que dans le reste des pays de l’OCDE. Ainsi, les moins de 1 an ont 78% de risques de décéder en plus par rapport à la moyenne de l’OCDE. Chez les nourrissons, la mortalité est dûe aux naissances prématurées alors que chez les plus âgés, les décès liés à la santé sont le plus souvent des suicides.
 * Les maladies chroniques : les conditions chroniques ont augmenté de 25,8% à 31% entre 2011 et 2023. Cela est dû majoritairement à une hausse des conditions liées à la santé mentale, notamment une hausse des personnes diagnostiquées pour dépression ou anxiété.
@@ -28,7 +28,7 @@ Selon Forrest et al. (2025) et le rapport de l'UNICEF sur le bien-être des enfa
 
 ### Indices de santé et de bien-être 
 
-L’UNICEF propose dans son étude un outil dimensionnel pour mesurer le bien-être, dont la santé n’est qu’une composante. Liée à la sécurité, celle-ci inclut la mortalité infantile, le faible poids à la naissance, les taux de vaccination (rougeole, polio, DTP3) et la mortalité des 1-19 ans.
+L’UNICEF propose dans son étude un outil multidimensionnel pour mesurer le bien-être, dont la santé n’est qu’une composante. Liée à la sécurité, celle-ci inclut la mortalité infantile, le faible poids à la naissance, les taux de vaccination (rougeole, polio, DTP3) et la mortalité des 1-19 ans.
 Pour cet indice, le score de chaque dimension est obtenu en faisant la moyenne des composantes qui la constituent et le classement général final est établi sur la base de la moyenne des notes obtenues dans les cinq dimensions. En effet, le but de cette étude est de comparer le bien-être dans 29 pays riches. Les États-Unis, en termes de bien-être global, sont 24e sur 29. 
 
 L’étude du JAMA combine 3 sources de données pour construire ses indices, dont des Enquêtes nationales représentatives (NHANES, NHIS, NSCH, PSID, YRBS) basées sur les rapports des parents ou des jeunes. La méthode de mesure la plus utilisé est celle des le rapport de taux (Rate Ratios - RR). Il compare la fréquence d'un événement (décès ou maladie) soit entre deux zones (USA vs OCDE). Ainsi, le taux de mortalité annuel des États-Unis divisé par celui de l’OCDE constitue ce ```Rate Ratios```, outil comparatif.
@@ -40,7 +40,7 @@ L’étude du JAMA combine 3 sources de données pour construire ses indices, do
 ### Références :
 
 1. Forrest, C. B., Koenigsberg, L. J., Eddy Harvey, F., Maltenfort, M. G., & Halfon, N. (2025). Trends in US Children's Mortality, Chronic Conditions, Obesity, Functional Status, and Symptoms. JAMA, 334(6), 509–516. https://doi.org/10.1001/jama.2025.9855
-2. UNICEF. (2022). Le bien-être des enfants dans les pays riches (Bilan Innocenti 11). Centre de recherche de l’UNICEF. https://www.unicef.fr/wp-content/uploads/2022/07/Le-bien-etre-des-enfants-dans-les-pays-riches.pdf
+2. Centre de recherche de l’UNICEF, 2013, « Le bien-être des enfants dans les pays riches : vue d’ensemble comparative », Bilan Innocenti 11, Centre de recherche de l’UNICEF, Florence. 
 
 ## Sujet et problématique <a name="subheading-2">
 
@@ -50,7 +50,7 @@ Cet indice vise à permettre l’identification de disparités géographiques en
 
 ## Bases de données <a name="subheading-3">
 
-I. Le **[NSCH](https://www.census.gov/programs-surveys/nsch/data/datasets.html)** (National Survey of Children’s Health) est une enquête auprès des ménages qui produit des données nationales et au niveau des États sur la santé physique et émotionnelle des enfants âgés de 0 à 17 ans aux États-Unis. L’enquête recueille des informations liées à la santé et au bien-être des enfants, notamment l’accès et le recours aux soins de santé, les interactions familiales, la santé des parents, les expériences scolaires et extrascolaires, ainsi que les caractéristiques du quartier de résidence. Depuis 2016, le NSCH est une enquête annuelle. L’enquête fournit des estimations nationales chaque année et des estimations au niveau des États en combinant 2 ou 3 années de données. Avant 2016, l’enquête était réalisée tous les 4 ans.
+I. Le **[NSCH](https://www.census.gov/programs-surveys/nsch/data/datasets.html)** (National Survey of Children’s Health) est une enquête auprès des ménages qui produit des données nationales aux États-Unis sur la santé physique et émotionnelle des enfants âgés de 0 à 17 ans. L’enquête recueille des informations liées à la santé et au bien-être des enfants, notamment l’accès et le recours aux soins de santé, les interactions familiales, la santé des parents, les expériences scolaires et extrascolaires, ainsi que les caractéristiques du quartier de résidence. Depuis 2016, le NSCH est une enquête annuelle. L’enquête fournit des estimations nationales chaque année et des estimations au niveau des États en combinant 2 ou 3 années de données. Avant 2016, l’enquête était réalisée tous les 4 ans.
 
 II. **[Les données géographiques](https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html)** permettent de tracer sur un fond de carte des différents états des US des résultats issus de la base de données antérieure.
 
