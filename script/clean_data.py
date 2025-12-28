@@ -45,7 +45,7 @@ def lecture_fichier_sas(fs, chemin_lecture, chemin_ecriture):
     return dfs
 
 
-def lecture_fichier_csv(fs, chemin_lecture, chemin_ecriture, guide_ind):
+def lecture_fichier_csv(fs, chemin_lecture, chemin_ecriture, latin_encoding=False):
     """
     Lecture des fichiers csv.
 
@@ -59,13 +59,13 @@ def lecture_fichier_csv(fs, chemin_lecture, chemin_ecriture, guide_ind):
         génération d'un objet dataframe
     """
     lecture_fichier(fs, chemin_lecture, chemin_ecriture)
-    if guide_ind is True:
-        guide = pd.read_csv(chemin_ecriture, index_col=False)
+    if latin_encoding is False:
+        df_csv = pd.read_csv(chemin_ecriture, index_col=False)
     else:
-        guide = pd.read_csv(chemin_ecriture, index_col=False, encoding='ISO-8859-1',
-                            low_memory=False)
+        df_csv = pd.read_csv(chemin_ecriture, index_col=False, encoding='ISO-8859-1',
+                             low_memory=False)
 
-    return guide
+    return df_csv
 
 
 def lecture_fichier_shapefile(fs, chemin_lecture, chemin_ecriture):

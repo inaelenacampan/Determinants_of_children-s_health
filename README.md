@@ -1,6 +1,5 @@
 # Étude sur les facteurs qui déterminent la santé des enfants aux États-Unis
-## Une analyse statistique, économétrique et temporelle 
-
+## Analyse statistique et évolution temporelle
 [ Python pour la Data Science, 2A Ensae ]
 
 Groupe TP n°5 
@@ -89,6 +88,8 @@ Pour une approche plus interactive de la documentation, dans le terminal commenc
 ```bash
 pdoc script 
 ```
+
+Maintenant, vous pouvez parcourir le notebook dans son intégralité.
 
 ## Résultats principaux et conclusions <a name="subheading-6">
 
