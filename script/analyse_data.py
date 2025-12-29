@@ -592,7 +592,7 @@ def state_rankings(df_indicator, df_geo):
 
     # sauvegarde au format jpg ---> inclusion dans le readMe
     plt.savefig(
-        "docs/classement_etats_sante.jpg",
+        "results/classement_etats_sante.jpg",
         format="jpg",
         dpi=300,
         bbox_inches="tight"
