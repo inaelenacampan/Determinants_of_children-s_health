@@ -16,26 +16,29 @@ Groupe TP n°5
 
 ## Revue de Littérature <a name="subheading-1">
 
-S'intéresser à la santé des enfants, c’est aussi s’intéresser à la santé des adultes de demain. Dans un environnement beaucoup moins certain, d’un point de vue climatique, économique et politique, l’enjeu de conduire les enfants vers la vie adulte dans les meilleures conditions possibles pour chacun n’a jamais été aussi complexe. De nombreuses recherches portent sur la santé de la population générale d’un pays et, dans une moindre mesure, sur celle des moins de 18 ans.
+La santé des enfants constitue un déterminant central de la santé à l’âge adulte. Les conditions de santé, de nutrition et de soins durant l’enfance influencent durablement le développement physique, cognitif et social. Aux États-Unis, la recherche en santé publique s’est largement concentrée sur la population générale, tandis que la santé des enfants et des adolescents fait l’objet d’une attention plus limitée et souvent fragmentée. Cette revue de littérature s’inscrit dans ce contexte et vise à synthétiser les principaux résultats existants sur la santé des moins de 18 ans aux États-Unis.
 
 ### État de santé des enfants aux États-Unis
 
-Selon Forrest et al. (2025) et le rapport de l'UNICEF sur le bien-être des enfants (2013),  la santé des enfants s’est détériorée aux États-Unis lors des 17 dernières années. Trois critères sont étudiés plus en détails : 
+Selon Forrest et al. (2025) et le rapport de l’UNICEF sur le bien-être des enfants (2013), les indicateurs de santé des enfants se sont globalement dégradés aux États-Unis au cours des dix-sept dernières années. Trois dimensions principales ressortent de la littérature : la mortalité, les maladies chroniques et l’obésité.
 
-* La mortalité des enfants : les nourrissons et les 1-19 ont beaucoup plus de chances de décéder aux États-Unis que dans le reste des pays de l’OCDE. Ainsi, les moins de 1 an ont 78% de risques de décéder en plus par rapport à la moyenne de l’OCDE. Chez les nourrissons, la mortalité est dûe aux naissances prématurées alors que chez les plus âgés, les décès liés à la santé sont le plus souvent des suicides.
-* Les maladies chroniques : les conditions chroniques ont augmenté de 25,8% à 31% entre 2011 et 2023. Cela est dû majoritairement à une hausse des conditions liées à la santé mentale, notamment une hausse des personnes diagnostiquées pour dépression ou anxiété.
-* Obésité : le taux d'obésité infantile est passé de 17,0 % (2007) à 20,9 % (2023)
+La mortalité infantile et juvénile demeure nettement plus élevée aux États-Unis que dans les autres pays de l’OCDE. Les nourrissons et les enfants âgés de 1 à 19 ans présentent un risque de décès supérieur à la moyenne de l’OCDE. Pour les enfants de moins d’un an, ce risque est supérieur de 78 %. La mortalité infantile est principalement liée aux naissances prématurées, tandis que chez les enfants plus âgés, les décès de cause médicale sont majoritairement associés aux suicides.
+
+La prévalence des maladies chroniques chez les enfants et les adolescents a également augmenté, passant de 25,8 % en 2011 à 31 % en 2023. Cette évolution s’explique en grande partie par la hausse des troubles de santé mentale, en particulier les diagnostics de dépression et d’anxiété.
+
+Enfin, l’obésité infantile a progressé de manière continue sur la période considérée. Le taux d’obésité est passé de 17,0 % en 2007 à 20,9 % en 2023, confirmant une tendance durable à la hausse.
 
 ### Indices de santé et de bien-être 
 
-L’UNICEF propose dans son étude un outil multidimensionnel pour mesurer le bien-être, dont la santé n’est qu’une composante. Liée à la sécurité, celle-ci inclut la mortalité infantile, le faible poids à la naissance, les taux de vaccination (rougeole, polio, DTP3) et la mortalité des 1-19 ans.
-Pour cet indice, le score de chaque dimension est obtenu en faisant la moyenne des composantes qui la constituent et le classement général final est établi sur la base de la moyenne des notes obtenues dans les cinq dimensions. En effet, le but de cette étude est de comparer le bien-être dans 29 pays riches. Les États-Unis, en termes de bien-être global, sont 24e sur 29. 
+Le rapport de l’UNICEF et l’étude publiée dans le Journal of the American Medical Association (JAMA), l’une des principales revues scientifiques en médecine et en santé publique, reposent sur des approches comparables visant à mesurer et comparer la santé et le bien-être des enfants dans les pays à haut revenu.
 
-L’étude du JAMA combine 3 sources de données pour construire ses indices, dont des Enquêtes nationales représentatives (NHANES, NHIS, NSCH, PSID, YRBS) basées sur les rapports des parents ou des jeunes. La méthode de mesure la plus utilisé est celle des le rapport de taux (Rate Ratios - RR). Il compare la fréquence d'un événement (décès ou maladie) soit entre deux zones (USA vs OCDE). Ainsi, le taux de mortalité annuel des États-Unis divisé par celui de l’OCDE constitue ce ```Rate Ratios```, outil comparatif.
+L’UNICEF utilise un cadre multidimensionnel du bien-être, dont la santé constitue l’une des cinq dimensions. Cette dimension est mesurée à partir de plusieurs indicateurs : la mortalité infantile, la part des naissances de faible poids, les taux de vaccination (rougeole, polio et DTP3) ainsi que la mortalité des enfants et adolescents âgés de 1 à 19 ans. Pour chaque dimension, un score est calculé comme la moyenne des indicateurs correspondants. Le classement final repose sur la moyenne des scores obtenus dans l’ensemble des dimensions, ce qui permet de comparer le bien-être des enfants dans 29 pays à haut revenu. Dans ce classement global, les États-Unis occupent le 24ᵉ rang.
+
+L’étude du JAMA s’appuie sur la combinaison de plusieurs enquêtes nationales représentatives menées aux États-Unis, notamment le NHANES, le NHIS, le NSCH, le PSID et le YRBS. Ces enquêtes reposent sur les déclarations des parents ou des enfants et adolescents eux-mêmes. Les comparaisons internationales sont principalement réalisées à l’aide de rapports de taux (rate ratios, RR), qui mesurent le rapport entre la fréquence d’un événement de santé dans deux populations. Par exemple, un rate ratio de mortalité compare le taux annuel observé aux États-Unis à celui observé en moyenne dans les pays de l’OCDE.
 
 ### Choix de la base de données principale
 
-À partir de ces références, nous avons retenu la base NSCH, qui répond au critère d’accessibilité en ligne sans nécessité de demande spécifique pour accéder aux données. Elle présente également l’avantage de couvrir l’ensemble des groupes d’âge des enfants et adolescents de moins de 18 ans.
+À partir de ces références, nous avons retenu la base NSCH, qui répond au critère d’accessibilité en ligne. Elle présente également l’avantage de couvrir l’ensemble des groupes d’âge des enfants et adolescents de moins de 18 ans.
 
 ### Références :
 
@@ -52,15 +55,15 @@ Cet indice vise à permettre l’identification de disparités géographiques en
 
 I. Le **[NSCH](https://www.census.gov/programs-surveys/nsch/data/datasets.html)** (National Survey of Children’s Health) est une enquête auprès des ménages qui produit des données nationales aux États-Unis sur la santé physique et émotionnelle des enfants âgés de 0 à 17 ans. L’enquête recueille des informations liées à la santé et au bien-être des enfants, notamment l’accès et le recours aux soins de santé, les interactions familiales, la santé des parents, les expériences scolaires et extrascolaires, ainsi que les caractéristiques du quartier de résidence. Depuis 2016, le NSCH est une enquête annuelle. L’enquête fournit des estimations nationales chaque année et des estimations au niveau des États en combinant 2 ou 3 années de données. Avant 2016, l’enquête était réalisée tous les 4 ans.
 
-II. **[Les données géographiques](https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html)** permettent de tracer sur un fond de carte des différents états des US des résultats issus de la base de données antérieure.
+II. **[Les données géographiques](https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html)** permettent de tracer sur un fond de carte des différents États américains des résultats issus de la base de données antérieure.
 
-III. **[Les données économiques](https://apps.bea.gov/regional/downloadzip.htm)** permettent d'obtenir un indice synthétique plus fiable au niveau des état Américains. Le BEA (Bureau of Economic Analysis) c'est l’agence officielle américaine qui mesure l'activité économique : PIB, revenu, commerce, productivité, comptes régionaux, etc. Elle produit des données standardisées, fiables et comparables dans le temps, utilisées par le gouvernement, les chercheurs et les institutions internationales.
+III. **[Les données économiques](https://apps.bea.gov/regional/downloadzip.htm)** permettent d'obtenir un indice synthétique plus fiable au niveau des état Américains. Le BEA (Bureau of Economic Analysis) est l’agence officielle américaine qui mesure l'activité économique : PIB, revenu, commerce, productivité, comptes régionaux, etc. Elle produit des données standardisées, fiables et comparables dans le temps, utilisées par le gouvernement, les chercheurs et les institutions internationales.
 
 IV. **[Les données d'America's Health Rankings](https://www.americashealthrankings.org/publications/articles/state-rankings-since-1990)** fournissent des indicateurs de santé agrégés au niveau de chaque État américain depuis 1990. Le classement général des États est établi à partir de divers indicateurs répartis en cinq catégories liées à la santé : facteurs sociaux et économiques, environnement physique, comportements, soins cliniques et résultats en matière de santé.
 
 ## Visualisation des données et modélisation <a name="subheading-4">
 
-Pour s'y prendre, une sélection de variable est faite à travers une dimension santé physique, une dimension santé mentale, des questions d'assurance et environnement familial, variables économiques.
+Pour construire l’indicateur de santé, nous procédons à une sélection de variables organisées en plusieurs dimensions complémentaires. Celles-ci couvrent la santé physique, la santé mentale, l’environnement familial et la situation économique du ménage.
 
 Pour traiter les valeurs manquantes, lorsqu’elles ne sont pas dues à la structure du questionnaire le cas échéant, nous utilisons une imputation en utilisant la fonction ```KKNImputer``` de la librairie scikit-learn. Les valeurs manquantes de l'échantillon sont imputées en utilisant la valeur moyenne des ```n_neighbors``` plus proches voisins trouvés dans l’ensemble.
 
@@ -108,7 +111,7 @@ Au fil des années, nous n’observons pas de grands gains ou pertes dans le cla
 
 Pour comparer le classement donné par notre indicateur et celui donné par l'indicateur de la United Health Fondation, nous utilisons le tau de Kendall. Le tau de Kendall mesure l’association entre deux classements en comparant toutes les paires d’observations : une paire est dite concordante si l’ordre est le même dans les deux classements, discordante sinon. Le coefficient est calculé comme la différence entre le nombre de paires concordantes et discordantes, rapportée au nombre total de paires (avec des ajustements possibles en cas d’ex æquo). Il varie entre −1 (classements opposés) et +1 (classements identiques). Son principal intérêt est qu’il ne dépend que des rangs : il permet donc de comparer deux classements même lorsque les variables sont mesurées sur des échelles différentes ou non linéaires, et il est robuste aux valeurs extrêmes.
 
-La grande dispersion des points sur le graphique et la faiblesse du tau de Kendall (0.181) et une p-value qui nous permet de rejeter l'hypothèse nulle (Il n’existe aucune association monotone entre les deux variables) montre que les indicateurs donnent des classements faiblement corrélés. Cette différence peut s'expliquer par des choix de variables ou de pondération différents. Par ailleurs, nous comparons différentes régions d'un pays très développé où, en comparaison au reste du monde, les dépenses de santé sont élevées à peu près partout. Si nous comparions des pays avec des PIB très différents, nous devrions obtenir des classements similaires avec les deux indicateurs.
+La grande dispersion des points sur le graphique, la faiblesse du tau de Kendall (0.181) et une p-value qui nous permet de rejeter l'hypothèse nulle (il n’existe aucune association monotone entre les deux variables) montre que les indicateurs donnent des classements faiblement corrélés. Cette différence peut s'expliquer par des choix de variables ou de pondération différents. Par ailleurs, nous comparons différentes régions d'un pays très développé où, en comparaison au reste du monde, les dépenses de santé sont élevées à peu près partout. Si nous comparions des pays avec des PIB très différents, nous devrions obtenir des classements similaires avec les deux indicateurs.
 
 ![Kendall Tau](docs/kendall_tau_comp.png)
 
