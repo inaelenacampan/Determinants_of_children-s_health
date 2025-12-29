@@ -11,3 +11,4 @@ s3fs
 scikit-learn
 scipy
 seaborn
+statsmodels

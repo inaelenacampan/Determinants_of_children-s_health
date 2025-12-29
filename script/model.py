@@ -119,8 +119,7 @@ def state_indicator(df_theme, variables, theme, year, minimum, maximum):
     Returns:
         pandas.Series
             Série indexée par le code FIPS des États (FIPSST) contenant
-            le sous-indicateur normalisé sur l'intervalle [0, 1] pour
-            le thème et l'année considérés.
+            le sous-indicateur pour le thème et l'année considérés, normalisé sur [0,1].
     """
     # groupby -- préciser les colonnes d'interet afin d'éviter des soucis avec la mise-a-jour pandas
     # => les warnings disparaissent
@@ -137,7 +136,32 @@ def state_indicator(df_theme, variables, theme, year, minimum, maximum):
 
 def calculate_indicator(year, dfs, theme, cat_variables, bin_variables, groups):
     """
-    -- add legend
+    Calcul effectif d'un sous-indicateur thématique (santé ou santé mentale), en utilisant
+    les fonctions définies précédemment et normalisation sur [0,1].
+
+    Args:
+        dfs : dict
+            Dictionnaire des bases de données.
+        year : str
+            Année d'analyse, utilisée pour nommer la colonne du sous-indicateur.
+        theme : str
+            Nom du thème étudié ("micro_eco", "health", "mental_health"),
+            utilisé pour nommer la colonne du sous-indicateur.
+        cat_variables : list
+            Liste des variables catégorielles entrant dans le calcul
+            du sous-indicateur.
+        bin_variables : list
+            Liste des variables binaires entrant dans le calcul
+            du sous-indicateur.
+        groups : list
+            Liste de variables supplémentaires (variables de regroupement et de poids)
+            à conserver dans le DataFrame final.
+
+    Returns:
+        pandas.Series
+            Série indexée par le code FIPS des États (FIPSST) contenant
+            le sous-indicateur normalisé sur l'intervalle [0, 1] pour
+            le thème et l'année considérés.
     """
     variables = cat_variables + bin_variables
     df_theme = scale_transformation(year, dfs, variables, cat_variables, bin_variables, groups,
