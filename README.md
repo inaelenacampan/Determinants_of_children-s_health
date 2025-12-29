@@ -98,21 +98,21 @@ Maintenant, vous pouvez parcourir le notebook dans son intégralité.
 
 Dans la construction de nos indicateurs, nous avons remarqué que ceux-ci sont situés dans des intervalles parfois étroits. Même les valeurs extrêmes restent proches du centre, ce qui confirme une faible variabilité globale.
 
-![Boxplot 2023](docs/boxplot_2023.png)
+![Boxplot 2023](results/boxplot_2023.png)
 
 Via une carte interactive, on visualise les indicateurs au niveau de chaque État. Visuellement, les États en meilleure santé se situent sur la côte Est des États-Unis (New York, Pennsylvanie). On observe également une validation de la première loi de la géographie de Waldo Tobler : « Tout est lié à tout le reste, mais les choses proches sont plus liées que les choses éloignées. » Effectivement, sur la côte Est, plusieurs États en « bonne santé » sont des voisins, tandis que la santé se dégrade petit à petit vers le centre des États-Unis.
 
-![Carte interactive](docs/USA_Map_2024.png)
+![Carte interactive](results/USA_Map_2024.png)
 
 Au fil des années, nous n’observons pas de grands gains ou pertes dans le classement généré par l’indicateur global. Les États qui étaient en très bonne santé au début de 2021 le sont toujours en 2024, et il en va de même pour les États les moins bien classés. Certains États ont cependant connu des variations plus importantes, comme Rhode Island, qui a gagné 5 places entre 2023 et 2024, ou à l’inverse South Dakota, qui en a perdu 7 sur la même période.
 
-![Classement des états](docs/classement_etats_sante.jpg)
+![Classement des états](results/classement_etats_sante.jpg)
 
 
 Pour comparer le classement donné par notre indicateur et celui donné par l'indicateur de la United Health Fondation, nous utilisons le tau de Kendall. Le tau de Kendall mesure l’association entre deux classements en comparant toutes les paires d’observations : une paire est dite concordante si l’ordre est le même dans les deux classements, discordante sinon. Le coefficient est calculé comme la différence entre le nombre de paires concordantes et discordantes, rapportée au nombre total de paires (avec des ajustements possibles en cas d’ex æquo). Il varie entre −1 (classements opposés) et +1 (classements identiques). Son principal intérêt est qu’il ne dépend que des rangs : il permet donc de comparer deux classements même lorsque les variables sont mesurées sur des échelles différentes ou non linéaires, et il est robuste aux valeurs extrêmes.
 
 La grande dispersion des points sur le graphique, la faiblesse du tau de Kendall (0.181) et une p-value qui nous permet de rejeter l'hypothèse nulle (il n’existe aucune association monotone entre les deux variables) montre que les indicateurs donnent des classements faiblement corrélés. Cette différence peut s'expliquer par des choix de variables ou de pondération différents. Par ailleurs, nous comparons différentes régions d'un pays très développé où, en comparaison au reste du monde, les dépenses de santé sont élevées à peu près partout. Si nous comparions des pays avec des PIB très différents, nous devrions obtenir des classements similaires avec les deux indicateurs.
 
-![Kendall Tau](docs/kendall_tau_comp.png)
+![Kendall Tau](results/kendall_tau_comp.png)
 
 Il ne nous semble pas pertinent de régresser un indicateur sur un autre car le calcul du tau de Kendall et la visualisation des classements dans l'espace invalident l'hypothèse d'une relation linéaire entre les deux indicateurs.
