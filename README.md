@@ -104,7 +104,7 @@ Via une carte interactive, on visualise les indicateurs au niveau de chaque Éta
 
 ![Carte interactive](docs/USA_Map_2024.png)
 
-Au fil des années, nous n’observons pas de grands gains ou pertes dans le classement généré par l’indicateur global. Les États qui étaient en très bonne santé au début de 2021 le sont toujours en 2024, et il en va de même pour les États les moins bien classés. Certains États ont cependant connu des variations plus importantes, comme Rhode Island, qui a gagné 6 places entre 2023 et 2024, ou à l’inverse South Dakota, qui en a perdu 7 sur la même période.
+Au fil des années, nous n’observons pas de grands gains ou pertes dans le classement généré par l’indicateur global. Les États qui étaient en très bonne santé au début de 2021 le sont toujours en 2024, et il en va de même pour les États les moins bien classés. Certains États ont cependant connu des variations plus importantes, comme Rhode Island, qui a gagné 5 places entre 2023 et 2024, ou à l’inverse South Dakota, qui en a perdu 7 sur la même période.
 
 ![Classement des états](docs/classement_etats_sante.jpg)
 
